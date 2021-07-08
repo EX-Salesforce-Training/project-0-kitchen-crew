@@ -5,6 +5,7 @@ public class OriginalPokemon {
     List<Contact> updatingContacts = new List<Contact>();
     List<Contact> creatingBobs = new List<Contact>();
     
+    // On initiation adding 151 unique pokemon to accounts
     
     public OriginalPokemon() {
        
@@ -19,6 +20,7 @@ public class OriginalPokemon {
         insert creatingPokemonAccounts;
         
      }
+    // Quering for the pokemon that were created above and deleting them from the database
     
     public void DeletingPokemon() {
         for(Account a: [SELECT Name FROM Account WHERE Name LIKE 'pokemon%' ] ) {
@@ -28,8 +30,8 @@ public class OriginalPokemon {
     }
     
     
-    
-    
+     //Querying for any contacts that don't have an email or phone number and giving them a default
+     
     public void GenerateDefaultEmailAndPhone(){
         for(Contact c : [SELECT  Email FROM Contact WHERE Email = null]) {
             c.Email = 'defaultemail@email.com';
@@ -43,7 +45,7 @@ public class OriginalPokemon {
     }
     
    
-    
+    // Creating 200 new contacts called bob and also updating all existing contact names to bob as well
     
     public void createNewBobs() {
         for(integer i=0; i<200; i++) {
