@@ -1,0 +1,13 @@
+public class Excercises {
+    
+ public  void getCalculatedValue () {    
+ Account[] accts = new List<Account>();
+for(Integer i=4;i<150;i++) 
+	{
+   		Account a = new Account(Name='Acme' + i,BillingCity='San Francisco');
+   		accts.add(a);
+        insert a;
+        }
+    
+     }    
+}
