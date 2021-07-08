@@ -1,13 +1,41 @@
 public class Excercises {
-    
- public  void getCalculatedValue () {    
- Account[] accts = new List<Account>();
-for(Integer i=4;i<150;i++) 
+   
+ 
+ 
+ 	//Create 150 new  accounts
+ 	public  void createAccounts() {    
+	Account[] accts = new List<Account>();
+	for(Integer i=0;i<150;i++) 
 	{
    		Account a = new Account(Name='Acme' + i,BillingCity='San Francisco');
    		accts.add(a);
         insert a;
         }
     
-     }    
+     }
+
+    
+     //Select all new created Accounts and delete them from Database
+   	public void deleteAccounts(){
+        
+  		List<Account> accountList = [SELECT Id FROM Account WHERE Name LIKE '%Acme%'];
+
+		DELETE accountList;
+    }
+
+
+	//Query for all accounts without phone or email, and a default value to it.
+     public void provideDefaults(){
+        
+        List<Account> accountList = [SELECT Id From Account WHERE PHONE = ''];
+        
+		for(Account a: accountList) 
+	{
+   		a.Phone='1001-000-000';
+    }
+        update accountList;
+}
+    
+    
+
 }
