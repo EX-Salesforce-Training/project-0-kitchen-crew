@@ -1,0 +1,13 @@
+public interface Bus {
+    
+    
+	void pullOverForPassengers();
+
+    void lowerBusForBoarding(integer heightLowered);
+    
+    void raiseBusForMoving(integer heightRaised);
+    
+    void openDoors();
+    
+    
+}
