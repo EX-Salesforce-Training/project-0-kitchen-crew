@@ -1,0 +1,63 @@
+/* Apex Challenge Seven
+ * Evan DeVizio
+ * Created: 7/9/21
+ * Last Modified: 7/9/21 
+ * Description: A use case for the Vehicle class and Plane interface. */ 
+
+public class BoeingSevenTwentySeven extends Vehicle implements Plane {
+    
+    Boolean inAir = false;
+    Integer currentAlt = 0;
+    Integer destinationAlt = 0;
+    public enum directionType {UP, DOWN} // For changing altitude
+    directionType direction;
+    transportType transport = transportType.AIR;
+    
+    public BoeingSevenTwentySeven(){
+        weight = 170000;
+        currentSpeed = 0;
+    }
+    
+    public void TakeOff(){
+        if (!inAir) {
+            while (this.currentSpeed < 175) {
+                system.debug('Gaining speed...');
+                currentSpeed++;
+                direction = directionType.UP;
+            }
+            system.debug('Take off speed is: ' + currentSpeed);
+        }
+    }
+    
+    public void ChangeAltitude(Integer destinationAlt){
+        if (inAir){ // 
+            if (direction == directionType.UP) {
+                system.debug('Going up to ' + destinationAlt + ' ft.');
+                while (currentAlt < destinationAlt) {
+                	currentAlt++;
+                }
+            } else {
+                while (currentAlt > destinationAlt) {
+                    system.debug('Going down to ' + destinationAlt + ' ft.');
+              		Decelerate();
+            	}
+            }
+        } else { 
+            system.debug('Plane must be airborne to change altitude.');
+        }
+        system.debug('Reached altitude of ' + currentAlt + ' ft.');
+    }
+    
+    public void Land(){
+        changeAltitude(0);
+        Decelerate();
+        system.debug('The plane has landed safely.');
+    }
+
+    public override void Decelerate(){
+        if (direction != directionType.DOWN) {
+            direction = directionType.DOWN;
+        }
+        super.Decelerate();
+    }     
+}
