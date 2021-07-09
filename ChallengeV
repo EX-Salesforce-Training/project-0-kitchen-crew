@@ -1,0 +1,32 @@
+public class ChallengeV {
+    
+    
+  
+    // Making the phone number for a contact the phone number from the account it is linked to(only if one doesnt exist for the contact)
+    
+    public void updatingChildInformation() {
+       List<Contact> ChildrenList = [SELECT Phone,Email,OwnerId, account.phone FROM Contact];
+        for(Contact c: ChildrenList) {
+            if(c.Phone == Null) {
+               c.Phone = c.account.phone;    
+            }
+        }
+       update ChildrenList;
+    }
+    
+    
+    // Creating a task for the owner of a contact record to create an email if an email doesn't exist for the contact
+    
+    public void createTaskForEmail() {  
+      Task needEmail = new Task();
+        for(Contact c: ChildrenList) {
+           if(c.Email == Null) {
+                needEmail.OwnerId = c.OwnerId;
+                needEmail.Priority = 'High';
+                needEmail.Subject = 'Email';
+                needEmail.Description = 'Need to fill out email for this contact please';   
+      	  	}
+		}
+ 	insert needEmail;
+	}
+}
