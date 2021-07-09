@@ -1,0 +1,44 @@
+/* Super Class Vehicle that other specific vehicle classes will extend.
+// Author: Milan Winter
+// Date Created: 7/9/2021
+// Date Last Updated: 7/9/2021
+// Description
+// 
+//  
+//   
+//    
+//      
+ */
+
+public virtual class Vehicle {
+    
+    static integer numOfVehicles = 0;
+    
+    
+    integer speed;
+    
+    
+   // public enum Transport {Air,Water,Land};
+  
+        
+    public Vehicle() {
+        numOfVehicles ++;
+        speed = 0;
+    }
+    
+    public virtual void move(integer speed) {
+        if(speed > 0) {
+          this.speed = speed;  
+        }
+       
+	}
+    
+    
+    public virtual void Stop() {
+        speed = 0;
+    }
+    
+    public static integer getNumberofVehicles() {
+        return numOfVehicles;
+	}
+}
