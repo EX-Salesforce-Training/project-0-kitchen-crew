@@ -1,0 +1,11 @@
+/* Apex Challenge Seven
+ * Evan DeVizio
+ * Created: 7/9/21
+ * Last Modified: 7/9/21 
+ * Description: An interface to implement an airplane. */ 
+
+public Interface Plane {
+    void TakeOff();
+    void ChangeAltitude(Integer destinationAlt);
+    void Land();
+}
