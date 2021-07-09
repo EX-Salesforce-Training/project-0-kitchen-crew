@@ -1,0 +1,30 @@
+public class AccountTriggerHandler {
+    public static void protectOpenOpportunities(List<Account> delAcctList) {
+        List<Opportunity> oppList = new List<Opportunity>();
+        for (Account a : delAcctList) {
+            for (Opportunity o : [SELECT OwnerId, StageName FROM Opportunity WHERE OwnerId = :a.OwnerId]) {
+                if (o.StageName != 'Closed Won' || o.StageName != 'Closed Lost') {
+                    o.addError('Cannot delete active opportunity.');
+                }
+            }
+        }
+    }
+    
+    public static void noCaliforniaAccts(List<Account> caliAcctList) {
+        for (Account a : caliAcctList) {
+            if (a.ShippingState == 'California') {
+                a.addError('Cannot create new Account in California.');
+            }
+        }
+    }
+    
+    public static void createDefaultContactIfNone(List<Account> acctList) {
+        Contact con = new Contact();
+        for (Account acct : acctList) {
+        	con = [SELECT OwnerId FROM Contact WHERE OwnerId = :acct.OwnerId];
+            if (con == null){
+                con = new Contact(OwnerId = acct.OwnerId);
+            }
+        }
+    }
+}
