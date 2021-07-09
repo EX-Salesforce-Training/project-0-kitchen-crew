@@ -1,0 +1,30 @@
+/* Evan DeVizio
+ * July 8, 2021
+ * Apex Challenge 5
+ * We have received new requirements that the data in our org needs to meet new completeness standards. 
+ * To facilitate this we are going to use SOQL to check our data and handle it by setting a default value for the phone to be equal to the related account, 
+ * and create a task if it is missing an email for the record owner to update it. */
+
+public class ApexChallengeFive {
+        
+    public void TaskChallenge() {
+        
+        Task bobsTask = new Task();
+    	Contact c = [SELECT OwnerId FROM Contact LIMIT 1];
+        List<Contact> contactList = new List<Contact>();
+        
+        for (Contact missingFields : [SELECT Email, Phone, Account.Phone FROM Contact WHERE Phone = '' or Phone = NULL]) {
+        	missingFields.Phone = missingFields.Account.Phone;
+            contactList.add(missingFields);
+            
+            if (missingFields.Email == '' || missingFields.Email == null) {
+                bobsTask.OwnerId = c.OwnerId;
+            	bobsTask.Status = 'In Progress';
+            	bobsTask.Priority = 'High';
+            	bobsTask.Subject = 'Email';
+        	}
+        }
+        update bobsTask;	// Throws an error at runtime, need Id in bobsTask
+        upsert contactList;
+    }
+}
