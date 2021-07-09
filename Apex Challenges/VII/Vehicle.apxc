@@ -1,0 +1,26 @@
+/* Apex Challenge Seven
+ * Evan DeVizio
+ * Created: 7/9/21
+ * Last Modified: 7/9/21 
+ * Description: An abstract class to create Vehicle objects. */ 
+
+public abstract class Vehicle {
+ 
+    public enum transportType {AIR, LAND, WATER}
+    public static Integer numOfVehicles;
+    public Integer weight;
+    public Integer currentSpeed {get;set;}
+    
+    public Vehicle(){
+        numOfVehicles++;
+    }
+    
+    public virtual void Accelerate(Integer speed){
+        this.currentSpeed = speed;
+    }
+    public virtual void Decelerate(){
+        if (this.currentSpeed > 0) {
+        	this.currentSpeed = 0;
+    	}
+	}
+}
