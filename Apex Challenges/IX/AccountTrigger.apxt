@@ -1,0 +1,29 @@
+// Trigger declaration, followed by DML events the trigger will activate in response to.
+trigger AccountTrigger on Account (before insert, before update, before delete, after insert, after update, after delete, after undelete) {
+    // We check the context of the trigger, and then route it to the appropriate handler methods.
+    Switch on Trigger.OperationType {
+        when BEFORE_INSERT {
+            AccountTriggerHandler.noCaliforniaAccts(trigger.new);
+        } 
+        when BEFORE_UPDATE {
+            
+        }
+        when BEFORE_DELETE {
+            AccountTriggerHandler.protectOpenOpportunities(trigger.new); 
+        }
+        when AFTER_INSERT {
+            AccountTriggerHandler.createDefaultContactIfNone(trigger.new);
+        }
+        when AFTER_UPDATE {
+            
+        }
+        when AFTER_DELETE {
+            
+        }
+        when AFTER_UNDELETE {
+            
+        } when else {
+            
+        }
+    }
+}
