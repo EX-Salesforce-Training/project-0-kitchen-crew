@@ -1,0 +1,49 @@
+/* Evan DeVizio
+ * July 7, 2021
+ * Intro to Apex */
+ 
+public class ApexChallenges {
+    
+    //	Challenge 1: Create a class that has a method to add 151 accounts to your org.
+  	//	These accounts should have unique names.
+    public void NewPokedex() {
+        List<Account> pkmnList = new List<Account>();
+        for(integer i = 1; i <= 151; i++) {
+        	pkmnList.add(new Account(Name = 'Pokemon #' + i));
+    	}
+        insert(pkmnList);
+        system.debug(pkmnList);
+    }
+    
+    //	Challenge 2: Query for the accounts you made, and then remove them from the database.
+    public void RemovePkmn() {	// Get a list of Pokemon and delete it from the DB
+        List<Account> rmPkmnList = [SELECT Id FROM Account WHERE Name LIKE 'Pokemon #%'];
+        delete(rmPkmnList);
+    }
+    
+    //	Challenge 3: Query for all contacts that do not have a email and/or phone number associated with them, 
+    //	and provide default data for those fields.
+    public void DefaultPhoneEmail() {
+        string defaultEmail = 'someone@somewhere.com';
+        string defaultPhone = '555-555-1234';
+        List<Contact> contactsWithout = [SELECT Id FROM Contact WHERE Email = '' OR Phone = ''];
+        for(Contact c : contactsWithout) {
+            c.Email = defaultEmail;
+            c.Phone = defaultPhone;
+        }
+        update(contactsWithout);
+    }
+    
+    //	Challenge 4: Create 200 new contacts, plus update all existing contacts first names to bob. 
+    //	In a single DML update and add the new contacts.
+    public void BobifyAll() {
+        List<Contact> existingContacts = new List<Contact>();
+        for(Contact c : [SELECT FirstName FROM Contact]) {
+            c.FirstName = 'Bob';
+        }
+        for(integer i = 0; i < 200; i++) {
+            existingContacts.add(new Contact(FirstName = 'Bob', LastName = 'LastName' + i));
+        }
+        upsert(existingContacts);
+    }
+}
