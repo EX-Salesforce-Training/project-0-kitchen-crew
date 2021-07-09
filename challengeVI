@@ -1,0 +1,54 @@
+public class ChallengeVI {
+
+    public void CreatingAccounts(integer n) {
+       List<Account> accountsList = new List<Account>();
+        for(integer i=0 ; i < n;i++) {
+            Account account = new Account();
+            account.Name = 'Account' + i;
+            account.AnnualRevenue = 1000 + i;
+            account.Site = 'www.Account' + i + '.com';
+            account.Phone = '1234567891';
+            accountsList.add(account);
+        }
+        insert accountsList;
+        CreateContactForAccount(accountsList);
+    }
+
+    public void CreateContactForAccount(List<Account> AccList) {
+        List<Contact> bobsList = new List<Contact>();
+        for(Account a: AccList) {
+            Contact c = new Contact();
+            c.AccountId = a.Id;
+            c.LastName = a.Name + 'Corpman';
+            c.FirstName = 'FirstName' + a.Id;
+            c.phone = '1987654324';
+            c.email= c.firstname	+ '@' + a.name + '.com';
+            bobsList.add(c);
+        }
+        insert bobsList;
+	}
+    
+    public void updateChildContacts() {
+        List<Account> accList = [SELECT phone, (SELECT Id, phone FROM Contacts) FROM Account];
+        List<Contact> conList = new List<Contact>();
+        for(Account a: accList) {
+            if(a.Contacts != null) {
+               List<Contact> curContacts = a.Contacts;
+            for(Contact c: curContacts) {
+                c.phone = a.phone;
+                conList.add(c);   
+            	}
+          
+            }
+		}
+        update conList;
+    }
+    
+    
+    public void SystemLog() {
+        for(contact c : [SELECT FirstName, LastName, Account.Name, Account.Phone, Account.Site FROM Contact]) {
+            system.debug(c.FirstName + ' ' + c.LastName + ', From:' + c.Account.Name + '. Reachable at:' + c.Account.Phone	+ ' and ' + c.Account.site);
+        }
+    }
+    
+}
