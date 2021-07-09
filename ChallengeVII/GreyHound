@@ -1,0 +1,47 @@
+public class GreyHound extends Vehicle implements Bus {
+    
+    
+    decimal busHeight;
+    
+    integer doors;
+    
+    integer busDoorsOpen{get;set;}
+    
+    public Greyhound() {
+        this(100.5, 3);
+    }
+    
+   public Greyhound(integer doors) {
+        this(100.5, doors);
+    }
+    
+    public Greyhound(decimal height) {
+        this(height, 3);
+    }
+    
+    public Greyhound(decimal height, integer doors) {
+        this.busHeight = height;
+        this.doors = doors;
+	}
+    
+    public override void move(integer speed) {
+        super.move(speed);
+    }
+    
+    public override void stop() {
+		super.stop();
+    }
+    
+    public void pullOverForPassengers() {
+          stop();
+    }
+    
+    public void lowerBusForBoarding(integer heightLowered) {
+		height -= amountLowered;
+    }
+    
+    public void openDoors() {
+        
+    }
+
+}
