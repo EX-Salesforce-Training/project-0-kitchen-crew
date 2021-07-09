@@ -1,0 +1,41 @@
+/* Create a method that creates N number of accounts, within it call a second method that creates N contacts. 
+   Relate the newly created contacts to the newly created accounts.
+   As a part of this fill out the following fields for each account:
+		Name, annual revenue, phone, and site.
+   Fill out the following fields: 
+		Last name, first name, phone, and email.
+   Once these are created ensure they are inserted into the database.
+	Create a third method that gets all child contacts from the account using a relationship query, 
+		and then changes the contact phone number to the account phone number.
+   Persist these changes. 
+   Query for contacts and retrieve each contacts first and last name, and then the related account name, phone, and site. 
+   Using system.debug display each of these in a debug log. */
+
+public class ApexChallengeSix {
+    public void CreateAccounts(integer numOfAccts) {
+        List<Account> listOfAccts = new List<Account>();
+        for (integer i = 0; i < numOfAccts; i++) {
+         	Account acct = new Account();
+        	acct.Name = 'Test' + i;
+        	acct.AnnualRevenue = 1000000;
+        	acct.Phone = '555-555-1234';
+        	acct.Site = 'www.test' + i + '.com';
+            listOfAccts.add(acct);
+        }
+        insert listOfAccts;
+        CreateContacts(listOfAccts);
+    }
+    public void CreateContacts(List<Account> acctList) {
+        List<Contact> listOfConts = new List<Contact>();
+        for (Account a : acctList) {
+        	Contact c = new Contact();
+            c.LastName = a.name+'testlast';
+            c.FirstName = 'testfirst';
+            c.Phone = '123-456-7890';
+            c.Email = c.FirstName + '@' + c.LastName + '.com';
+            c.AccountId = a.Id;
+            listOfConts.add(c);
+        }
+        insert listOfConts;
+    }
+}
