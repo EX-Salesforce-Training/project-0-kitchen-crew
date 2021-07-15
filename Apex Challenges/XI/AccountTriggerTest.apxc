@@ -20,8 +20,8 @@ public class AccountTriggerTest {
         if(ur.isSuccess()){
             system.assert(true); // the account was undeleted successfully
         }
-        Task testTask = new Task(OwnerID = testAccId);
-        if (testTask != null) {
+		Task t = [SELECT Id FROM Task LIMIT 1];
+        if (t != null) {
             system.assert(true); // the task was created successfully
         }
     }
