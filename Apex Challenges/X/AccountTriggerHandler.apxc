@@ -1,0 +1,26 @@
+////////////////////////////////////////////////////////////////////
+//
+// Name: AccountTriggerHandler
+// Author: Evan DeVizio, Serif Korkmaz
+// Created: 7/14/21
+// Updated: 7/14/21
+// Description: Helper class for handling different Account triggers
+//
+////////////////////////////////////////////////////////////////////
+/*
+After an account record is removed from the recycle bin, make a task for the account 
+owner to validate the record and update if needed.
+*/
+
+public class AccountTriggerHandler {
+    
+    public static void AccountUndelete(List<Account> accList) {
+        List<Task> newTasks = new List<Task>();
+        for (Account a : accList) {
+            newTasks.add(new Task(OwnerId = a.Id, 
+                                  Description = 'Please validate and update as needed'));
+        }
+        insert newTasks;
+    }
+    
+}
