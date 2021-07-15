@@ -1,0 +1,274 @@
+
+/*
+ * 
+ * Create a class that has a method to add 151 accounts to your org.
+
+These accounts should have unique names.
+
+*/
+public class ChallengeI {
+
+    
+    
+    public static void addPokemon(){
+        
+        List<Account> newList= new List<Account>();
+        
+        for(Integer i=0; i<151; i++){
+            Account new1= new Account();
+			new1.Name='test n '+i;         
+            newList.add(new1);
+        }
+        
+            insert newList;
+    }
+    
+
+}
+
+
+
+
+
+
+
+
+public class ChallengeII {
+
+    
+/*
+ * 
+ * Query for the accounts you made, 
+ * and then remove them from the database. 
+
+*/
+    public static void  getEmail(){
+        
+        List<Account> newAccount=[Select Id from account WHERE name LIKE'test%'];
+
+        
+        delete newAccount;
+        
+    }
+}
+
+
+
+
+/*
+ * https://discord.com/channels/470989974142058508/829019012989059153/862436786675646504
+ * 
+ * */
+
+public class ChallengeIII {
+    
+       
+    /*
+     * Query for all contacts
+     *  that do not have a email and/or phone number associated with them,
+     *  and provide default data for those fields.
+     */
+    
+public void defaultContact(){
+        List<Contact> noemail=[SELECT phone,email FROM contact WHERE phone='' OR email='' ];
+        
+        for(Contact c: noemail){
+            String email=c.Email;
+            if(email==''){
+                c.email='nulll';
+            }
+            if(c.Phone==''){
+                c.Phone='nulll';
+            }
+        }
+        
+        update noemail;
+    }
+}
+
+
+
+public class Challenge IIII {
+
+    
+    /*
+     * Create 200 new contacts, 
+     * plus update all existing contacts first names to bob.
+     *  In a single DML update and and add the new contacts.
+     * 
+     * /
+     */
+    
+    public static void contactsName (){
+       list<Contact> newCon= new List<Contact>();
+        
+       list<Contact> oldContacts=[Select Name From Contact];
+        
+           for(Contact c1:oldContacts){
+               c1.FirstName='Bob';
+           }
+        
+        update oldContacts;
+        
+        for(Integer i=0; i<199; i++){
+            Contact c= new Contact();
+           	c.FirstName='Bob';
+            newCon.add(c);
+        }
+			insert newCon;        
+    }
+}
+
+
+
+
+/*
+ * We have received new requirements that the data in our org needs to meet 
+ * new completeness standards. To facilitate this we are going to use SOQL
+ *  to check our data and handle it by setting a default value for the phone
+ *  to be equal to the related account,
+ *  and create a task if it is missing an email for the record owner to update it.
+*/
+public class ChallengeV {
+
+    public void missingValues(){
+    Task bobsTask = new Task();
+        
+    Contact c = [SELECT OwnerId FROM Contact LIMIT 1];
+    }
+    
+    public ChallengeV(){
+        bobsTask.OwnerId = c.OwnerId;
+        
+        insert bobsTask;
+    }
+		       
+    }
+
+
+
+/*
+ * Create a method that creates N number of accounts, within it call a second method that creates N contacts. Relate the newly created contacts to the newly created accounts. 
+
+As a part of this fill out the following fields for each account:
+Name, annual revenue, phone, and site.
+
+Fill out the following fields: 
+Last name, first name, phone, and email.
+
+Once these are created ensure they are inserted into the database.
+
+Create a third method that gets all child contacts from the account using a relationship query, and then changes the contact phone number to the account phone number.
+
+Persist these changes.
+
+Query for contacts and retrieve each contacts first and last name, and then the related account name, phone, and site. Using system.debug display each of these in a debug log.
+
+*/
+public class ChallengeVI {
+
+}
+
+
+/*
+ * Create code replicating vehicles to demonstrate the pillars of OOP.
+There should be a Vehicle super class, 
+and at least one interface such as 'Bus', or 'Ship' representing a classification of vehicles. 
+*/
+
+public class ChallengeVII {
+
+
+}
+
+
+//Create a custom exception, throw that exception in a method, and in another method that contains a try-catch-finally block, handle it.
+
+public class ChallengeVIII {
+
+}
+
+
+public class ChallengeVIIII {
+
+}
+///////////////////////////////////////////////////////////////
+//
+// Name: ContactTrigger
+// Author: Harvey Hill, Salesforce Team
+// Created: 11/19/19
+// Updated: 04/08/21
+// Description: We go over trigger basics.
+//
+///////////////////////////////////////////////////////////////
+
+// Triggers should be logicless as a best practice. This means we
+// use the trigger itself to channel the operation to a handler class.
+// Business logic should be contained in those handlers.
+trigger ContactTrigger on Contact (before insert, before update, before delete, after delete, after undelete, after update, after insert) {
+    // We have our basic set up for a trigger operating under the one trigger per object best practice.
+    // We use a switch statement to determine the context the trigger is operating in, and then call on our handler
+    // to deal with that specific case based on our business needs.
+    switch on trigger.operationType{
+        // We are only operating to check for duplicates currently, so we just call a handler in this switch case.
+        when BEFORE_INSERT{
+            ContactTriggerHandler.checkForDuplicates(trigger.new);
+        }
+        when BEFORE_UPDATE{
+            
+        }
+        When BEFORE_DELETE{
+            
+        }
+        when AFTER_INSERT{
+            
+        }
+        when AFTER_UPDATE{
+            
+        }
+        when AFTER_DELETE{
+            
+        }
+        when AFTER_UNDELETE{
+            
+        }
+    }
+}
+
+
+
+/*Whenever a new contact is
+made check to see if the email domain matches an account's site.
+If it does, relate the new contact to the account. 
+*/
+trigger TriggerContact on Contact (before insert) {
+    
+    Set<String> contactNames=new Set<String>();
+	List<Contact>contactList=new List<Contact>();
+        
+    for(Contact c: Trigger.New){
+        
+        contactList.add(c);
+        contactNames.add(c.Email);
+    }    
+    
+    
+  List<Account> myList = [SELECT Id, Name FROM Account WHERE Site IN :contactNames]; 
+    
+   
+    //If it does relate the new contact to the account
+     
+        for(Account a: myList){
+            
+        for(Contact c: contactList){
+            
+        if(a.Site== c.Email){
+           c.Id=a.Id;
+        }
+            }
+        }   
+    
+    update contactlist;
+    }
+
+
