@@ -1,0 +1,22 @@
+
+@IsTest
+public class contactTriggerTest {
+
+    
+    
+    @isTest
+    public static void siteRelaterTest(){
+        
+        Contact con= new Contact(email= 'bob@fedex.gov',lastname='Bobby');
+        
+        Account acco= new Account(site='fedex.gov', name='Bob');
+      
+        
+        database.insert(con);
+        
+        //fix select record from database to make sure it has been updated.
+        database.insert(acco);
+       
+        system.assert(con.AccountId==acco.Id);
+    }
+}
