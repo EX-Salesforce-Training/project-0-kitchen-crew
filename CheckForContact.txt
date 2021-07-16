@@ -1,0 +1,39 @@
+public class ContactTriggerHandler {
+
+    
+    
+    
+    public static void checkContactEmail(List<Contact> contactList){
+        
+        List<Contact> newList2=new List<Contact>();    
+        Set<String> emailDomains = new Set<String>();
+        
+    	
+        for(Contact c: contactList){
+            string domain = 'www.'+c.email.split('@').get(1);
+            emailDomains.add(domain);
+            
+            
+        }
+        
+        //Querying account database to see which emails are on our account database,
+        // 
+        
+        //accounts that have emails in database
+        List<Account> newList=[SELECT Id, site from Account where site IN:emailDomains];
+               
+            for(contact c : contactList){
+                for(Account acc: newList){     
+     			string domain1 = 'www.'+c.email.split('@').get(1);                
+                if(acc.Site == domain1){
+                c.Id=acc.Id;
+                }
+            }
+                
+                
+              
+        }
+        
+        
+    }
+}
