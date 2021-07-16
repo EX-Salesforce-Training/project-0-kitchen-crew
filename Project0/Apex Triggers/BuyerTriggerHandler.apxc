@@ -1,0 +1,20 @@
+///////////////////////////////////////////////////////////////
+//
+// Name: BuyerTriggerHandler
+// Author: Evan DeVizio
+// Created: 7/15/21
+// Updated: 7/16/21
+// Description: Helper class for triggers on Buyer__c
+//
+///////////////////////////////////////////////////////////////
+
+public class BuyerTriggerHandler {
+    
+    public static void CreateNewBuyerCart(List<Buyer__c> buyers) {
+        List<Shopping_Cart__c> cartList = new List<Shopping_Cart__c>();
+        for (Buyer__c b : buyers) {
+            cartList.add(New Shopping_Cart__c(Buyer__c = b.Id));
+        }
+        insert cartList;
+    }
+}
