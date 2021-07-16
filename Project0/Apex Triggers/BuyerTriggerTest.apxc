@@ -1,0 +1,40 @@
+///////////////////////////////////////////////////////////////
+//
+// Name: BuyerTriggerTest
+// Author: Evan DeVizio
+// Created: 7/15/21
+// Updated: 7/16/21
+// Description: Tests triggers on Buyer__c
+//
+///////////////////////////////////////////////////////////////
+
+@isTest
+public class BuyerTriggerTest {
+    
+    @isTest
+    public static void testSingleNewBuyerCart(){
+        // Create a test Buyer, then check if the resulting Shopping Cart matches.
+        Buyer__C testbuyer = new Buyer__C(Email__c = 'testemail@test.com', Address__c = 'test address');
+        insert testBuyer;
+        Shopping_Cart__c testCart = [SELECT Buyer__c FROM Shopping_Cart__c WHERE Buyer__c = :testBuyer.Id LIMIT 1];
+        if (testCart.Buyer__c == testBuyer.Id) {
+            system.assert(true);
+        }
+    }
+    
+    @isTest
+    public static void testBulkNewBuyerCart(){
+        // Create 200 test Buyers with unique email fields, 
+        // then check if all of the Shopping Carts were created successfully.  
+        List<Buyer__c> testBuyerList = new List<Buyer__c>();
+ 
+        for(integer i = 0; i < 200; i++) {	
+            testBuyerList.add(new Buyer__c(Email__c = 'test' + i + '@test' + i + '.com', Address__c = 'test address'));
+        }
+        insert testBuyerList;
+        
+        List<Shopping_Cart__c> shoppingCarts = [SELECT Buyer__c, Buyer__r.Email__c FROM Shopping_Cart__c WHERE Buyer__c IN :testBuyerList];
+		
+        System.assertEquals(200, shoppingCarts.Size());
+    }
+}
