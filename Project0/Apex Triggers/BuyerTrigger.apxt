@@ -1,0 +1,24 @@
+/////////////////////////////////////////////////////////////////////////
+//
+// Name: BuyerTrigger
+// Author: Evan DeVizio
+// Created: 7/15/21
+// Updated: 7/16/21
+// Description: Fires triggers on Buyer__c based on trigger operationType
+//
+/////////////////////////////////////////////////////////////////////////
+
+trigger BuyerTrigger on Buyer__c(before insert, before update, before delete, after insert, after update, after delete, after undelete) {
+    switch on trigger.operationType{
+        when BEFORE_INSERT{}
+        when BEFORE_UPDATE{}
+        When BEFORE_DELETE{}
+        when AFTER_INSERT{
+            BuyerTriggerHandler.CreateNewBuyerCart(trigger.new);
+        }
+        when AFTER_UPDATE{}
+        when AFTER_DELETE{}
+        when AFTER_UNDELETE{}
+        when else {}
+    }
+}
