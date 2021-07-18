@@ -18,4 +18,47 @@ public class WBExamTriggerHandler {
             }
         }
     }
+    
+    
+    public static void NewAccountContact(List<Account> newAccounts){
+        
+        Set<String> accNames = new Set<String>();
+        for(Account a: newAccounts){
+            accNames.add(a.name);
+        }
+        
+        List<Contact> relatedContact=[SELECT lastname from Contact where lastName in : accNames];
+        
+        
+        //those contacts that are related to it assign id to be equal to the new contact
+        //after trigger, does not exist until the soft save takes place, update contacts.
+        //do a dml for contacts since dml statement because trigger is for accounts
+        for(account a: newAccounts){
+            for(Contact c: relatedContact){
+                
+                if(a.name == c.lastName){
+                    c.AccountId = a.Id;
+                }
+            }
+        }
+        
+        update relatedContact;
+            
+            }
+    
+    
+    
+    public static void OpportunityClosedCheck(List<Opportunity> updateOpps,Map<id, Opportunity> oldOpps){
+        for(Opportunity o : updateOpps){
+            Opportunity oldOpp= oldOpps.get(o.id); 
+            //old before update 
+           //new will have whatever is contained after update. 
+            
+            if(oldOpp.StageName== 'closed Won'||oldOpp.StageName== 'closed Lost'){
+                o.addError('This opportunits is closed and cannot be changed');
+            }
+        }
+        
+        
+    }
 }
