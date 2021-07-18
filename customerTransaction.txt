@@ -1,0 +1,30 @@
+trigger TransactionTrigger on Transaction__c (before insert,after insert) {
+    
+    
+    
+    
+   switch on trigger.operationType{
+        // We are only operating to check for duplicates currently, so we just call a handler in this switch case.
+        when BEFORE_INSERT{
+           
+        }
+        when BEFORE_UPDATE{
+            
+        }
+        When BEFORE_DELETE{
+            
+        }
+        when AFTER_INSERT{
+            TransactionTriggerHandler.addRecords(); //Add new updated variables
+        }
+        when AFTER_UPDATE{
+       
+        }
+        when AFTER_DELETE{
+            
+        }
+        when AFTER_UNDELETE{
+            
+        }
+    }
+}

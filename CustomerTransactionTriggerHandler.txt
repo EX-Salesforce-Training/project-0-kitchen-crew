@@ -1,0 +1,39 @@
+public class TransactionTriggerHandler {
+
+    
+    public static void addRecord(){
+   // Get this ID.
+
+ 	CustomCustomer__c new1=[Select Id,Name From CustomCustomer__c where Name='Rafael' limit 1];
+    // Add a contact to this account.
+    Transaction__c con = new Transaction__c(Name='Joe',Customer__c=new1.Id);
+    
+
+
+	insert con;     
+ }
+    
+    public static void addRecords(){
+        
+    
+       // List<Transaction__c> list1= new List<Transaction__c>();
+        
+       
+     	Transaction__c tre= new Transaction__c (); 
+		tre.name='Bobby';
+        
+        CustomCustomer__c new1= new customCustomer__c();
+        new1.name='Bobby';
+        new1.Customer_LastName__c='bobeee';
+        new1.Address__c='kinrosss';
+       // Customer__c new1=[Select Id,Name From CustomCustomer__c where Name='Rafael' limit 1];
+        
+        
+        //tre.Name='eeeee11';
+       // tre.Customer__c=new1.Id;
+            
+      //  list1.add(tre);
+           
+        insert new1;
+    }
+}
