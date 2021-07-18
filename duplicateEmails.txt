@@ -1,0 +1,21 @@
+public class WBExamTriggerHandler {
+
+    
+    public static void PreventDuplicatesOnEmail(List<Contact> newContact){
+        Set<String> emailSet= new Set<String>();
+        
+        for(Contact c : newContacts){
+            if(c.email != null){
+                emailSet.add(c.email);
+            }
+        }
+        
+        for(Contact c: [Select email from contact where email in: emailSet]){
+            for(Contact newCon: newContacts){
+                if(c.email == newCon.email){
+                    newCon.addError('Email is already in use');
+                }
+            }
+        }
+    }
+}
