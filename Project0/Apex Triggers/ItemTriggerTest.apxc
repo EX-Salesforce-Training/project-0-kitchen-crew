@@ -1,0 +1,78 @@
+///////////////////////////////////////////////////////////////
+//
+// Name: ItemTriggerTest
+// Author: Evan DeVizio
+// Created: 7/19/21
+// Updated: 7/20/21
+// Description: Tests triggers on Item__c
+//
+///////////////////////////////////////////////////////////////
+@isTest
+public class ItemTriggerTest {
+    
+    @isTest
+    public static void testNewVehicleQuantity() {
+                
+        Id recordTypeId = Schema.SObjectType.Item__c.getRecordTypeInfosByName()
+                  .get('Vehicle').getRecordTypeId();
+        
+        Seller__c testSeller = new Seller__c(Address__c = '123 Test Street' + '\n' + 'Test City, NY 11111',
+                                            Email__c = 'testemail01@test.com');
+        insert testSeller;
+        
+        Item__c testItem = new Item__c(RecordTypeId = recordTypeId,
+            						  Item_Name__c = 'Test Name',
+                                      Vehicle_Manufacturer__c = 'Honda',
+                                      Vehicle_Model__c = 'Civic',
+                                      Year__c = 2015,
+                                      Category__c = 'Automobiles',
+                                      Condition__c = 'Used',
+                                      Price__c = 1500,
+                                      Seller_Item_Relationship__c = testSeller.Id);
+        
+        insert testItem;
+        
+        if(testItem.RecordTypeId == recordTypeId) {
+            if(testItem.Quantity__c == 1){
+            	system.assert(true);
+        	}
+        }
+    }
+    
+    @isTest
+    public static void testNewVehicleQuantityBulk() {
+        
+        Id recordTypeId = Schema.SObjectType.Item__c.getRecordTypeInfosByName()
+        	.get('Vehicle').getRecordTypeId();
+                        
+        List<Seller__c> testSellerList = new List<Seller__c>();
+        List<Item__c> testItemList = new List<Item__c>();
+        
+        for(Integer i = 0; i < 200; i++) {
+            Seller__c testSeller = new Seller__c(Address__c = '123 Test Street' + '\n' + 'Test City, NY 11111',
+                                                 Email__c = 'testemail' + i + '@test' + i + '.com');
+            testSellerList.add(testSeller);
+            system.debug(testSeller);
+        }
+        insert testSellerList;
+        for (Seller__c seller: testSellerList) {
+            testItemList.add(new Item__c(RecordTypeId = recordTypeId, 
+                                     Item_Name__c = 'Test Name', 
+                                     Vehicle_Manufacturer__c = 'Subaru', 
+                                     Vehicle_Model__c = 'Impreza', 
+                                     Year__c = 2012, 
+                                     Category__c = 'Automobiles', 
+                                     Condition__c = 'Used', 
+                                     Price__c = 9000, 
+                                     Seller_Item_Relationship__c = seller.Id));
+        }
+        insert testItemList;
+        List<Item__c> resultList = [SELECT Id, Quantity__c, Seller_Item_Relationship__c 
+                                    FROM Item__c WHERE Seller_Item_Relationship__c IN :testSellerList];
+        Integer totalQuantity = 0;
+        for(Item__c item : resultList) {
+            totalQuantity += (Integer)item.Quantity__c;
+        }
+        system.assertEquals(200, totalQuantity);
+    }
+}
