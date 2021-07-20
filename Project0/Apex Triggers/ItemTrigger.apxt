@@ -1,0 +1,25 @@
+/////////////////////////////////////////////////////////////////////////
+//
+// Name: ItemTrigger
+// Author: Evan DeVizio
+// Created: 7/19/21
+// Updated: 7/20/21
+// Description: Fires triggers on Item__c based on trigger operationType
+//
+/////////////////////////////////////////////////////////////////////////
+trigger ItemTrigger on Item__c (before insert, before update, before delete, after insert, after update, after delete, after undelete) {
+    
+    switch on trigger.operationType {
+        when BEFORE_INSERT{}
+        when BEFORE_UPDATE{}
+        when BEFORE_DELETE{}
+        when AFTER_INSERT{
+            // Set the Quantity of a new Vehicle record-type Item to 1.
+            ItemTriggerHandler.NewVehicleQuantity(trigger.new);
+        }
+        when AFTER_UPDATE{}
+        when AFTER_DELETE{}
+        when AFTER_UNDELETE{}
+    }
+
+}
