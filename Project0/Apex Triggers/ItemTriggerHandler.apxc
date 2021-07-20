@@ -1,0 +1,19 @@
+///////////////////////////////////////////////////////////////
+//
+// Name: ItemTriggerHandler
+// Author: Evan DeVizio
+// Created: 7/19/21
+// Updated: 7/20/21
+// Description: Helper class for triggers on Item__c
+//
+///////////////////////////////////////////////////////////////
+public class ItemTriggerHandler {
+    
+    public static void NewVehicleQuantity(List<Item__c> itemList) {
+        for(Item__c item : itemList) {
+            if(item.RecordType.Name == 'Vehicle') {
+                item.Quantity__c = 1;
+            }
+        }
+    }
+}
