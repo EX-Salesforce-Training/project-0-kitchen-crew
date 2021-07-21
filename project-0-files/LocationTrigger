@@ -1,0 +1,15 @@
+// Name: Location Trigger
+// Author: Milan Winter
+// Created: 7/17
+// Last Updated: 7/17
+// Description: A trigger that runs before an insert of a location to makes sure the state that were operating in is not in Alabama or alaska.
+
+
+
+trigger LocationTrigger on Location__c (before insert) {
+    Switch on trigger.OperationType {
+        when BEFORE_INSERT {
+            LocationHandler.checkLocationState(trigger.new);
+        }
+    }
+}
