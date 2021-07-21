@@ -1,0 +1,21 @@
+// Name: CarTriggerHandler
+// Author: Milan Winter
+// Created: 7/18/21
+// Last Updated: 7/18/21
+// Description: Logic for CarTrigger to check to see if a car has an owner related to it before deleting.
+
+
+public class CarTriggerHandler {
+    
+    
+    public static void checkIfCarOwned(List<Car__c> deletedCars) {
+        
+        for(Car__c car : deletedCars) {
+            if (car.Owned_by__c != null) {
+                car.addError('Can\'t remove a car from the database if it is related to a customer. Must remove the relationship first.');
+            }
+        }
+    }
+    
+    
+}
