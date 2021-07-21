@@ -1,0 +1,30 @@
+@isTest
+private class TransactionTriggerTest {
+
+    
+    @isTest private static void TestCustomerServices(){
+         //Create a transaction then query Serivces to see if it is populated
+         // start the scope of test
+        CustomCustomer__c customer= new CustomCustomer__c();
+		customer.Name='ellen';
+        customer.Address__c='kinross ave';
+        customer.Customer_LastName__c='Loustaunau';
+        insert customer;
+
+        Transaction__c transNew= new Transaction__c();
+        transNew.Name='Basic Plan';
+        transNew.Customer__c=customer.Id;
+        transNew.TransactionType__c='Internet';
+        transNew.Internet_PlanType__c='Basic';
+        
+        
+        Test.startTest();
+        insert transNew;
+      	Test.stopTest();
+                
+        //Perform Test to see if services is populated
+        List<ServicesCustomer__c> listServices= [Select Name FROM ServicesCustomer__c Where Name= :transNew.Name];
+        
+        system.assertEquals(1,listServices.size());
+    }
+}
