@@ -7,6 +7,7 @@
 // Description: Tests triggers on Item__c
 //
 ///////////////////////////////////////////////////////////////
+//
 @isTest
 public class ItemTriggerTest {
     
@@ -20,14 +21,10 @@ public class ItemTriggerTest {
                                             Email__c = 'testemail01@test.com');
         insert testSeller;
         
-        Item__c testItem = new Item__c(RecordTypeId = recordTypeId,
-            						  Item_Name__c = 'Test Name',
-                                      Vehicle_Manufacturer__c = 'Honda',
-                                      Vehicle_Model__c = 'Civic',
-                                      Year__c = 2015,
-                                      Category__c = 'Automobiles',
-                                      Condition__c = 'Used',
-                                      Price__c = 1500,
+        Item__c testItem = new Item__c(RecordTypeId = recordTypeId, Item_Name__c = 'Test Name', 
+                                      Vehicle_Manufacturer__c = 'Honda', Vehicle_Model__c = 'Civic',
+                                      Year__c = 2015, Category__c = 'Automobiles',
+                                      Condition__c = 'Used', Price__c = 1500,
                                       Seller_Item_Relationship__c = testSeller.Id);
         
         insert testItem;
@@ -56,14 +53,10 @@ public class ItemTriggerTest {
         }
         insert testSellerList;
         for (Seller__c seller: testSellerList) {
-            testItemList.add(new Item__c(RecordTypeId = recordTypeId, 
-                                     Item_Name__c = 'Test Name', 
-                                     Vehicle_Manufacturer__c = 'Subaru', 
-                                     Vehicle_Model__c = 'Impreza', 
-                                     Year__c = 2012, 
-                                     Category__c = 'Automobiles', 
-                                     Condition__c = 'Used', 
-                                     Price__c = 9000, 
+            testItemList.add(new Item__c(RecordTypeId = recordTypeId, Item_Name__c = 'Test Name', 
+                                     Vehicle_Manufacturer__c = 'Subaru', Vehicle_Model__c = 'Impreza', 
+                                     Year__c = 2012, Category__c = 'Automobiles', 
+                                     Condition__c = 'Used', Price__c = 9000, 
                                      Seller_Item_Relationship__c = seller.Id));
         }
         insert testItemList;
