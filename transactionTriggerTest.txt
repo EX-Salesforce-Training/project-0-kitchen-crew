@@ -1,33 +1,53 @@
-@isTest
-private class TransactionTriggerTest {
+public class TransactionTriggerHandler {
 
     
-    @isTest private static void TestSelectServices(){
-        
-        
 
-        Test.startTest();
-         //Create a transaction then query Serivces to see if it is populated
-         // start the scope of test
-        CustomCustomer__c customer= new CustomCustomer__c();
-		customer.Name='ellen';
-        customer.Address__c='kinross ave';
-        customer.Customer_LastName__c='Loustaunau';
-        insert customer;
-
-        Transaction__c transNew= new Transaction__c();
-        transNew.Name='Basic Plan';
-        transNew.Customer__c=customer.Id;
-        transNew.Internet_PlanType__c='Basic';
+    
+    public static void addRecords(List<Transaction__c> tre){
         
         
-  
-        insert transNew;
-      	Test.stopTest();
+        //Insert new record in service customer 
+        List<ServicesCustomer__c> custList= new List<ServicesCustomer__c>();
+        List<ActiveWarrantys__c> warrantyList=new List<ActiveWarrantys__c>();
+        List<Payment__c> paymentList=new List<Payment__c>();
+        
+        for(Transaction__c trans: tre){
+        if(trans.TransactionType__c=='Internet'){
+           
+         ServicesCustomer__C customer= new ServicesCustomer__C();
+            
+        // customer.Name=trans.Internet_PlanType__c;
+         customer.Name=trans.Name;
+            
+         custList.add(customer);
+            
+                insert custList;
+        }
+            
+         if(trans.TransactionType__c=='Warranty'){
+             
+                ActiveWarrantys__C warranty=new ActiveWarrantys__C();
                 
-        //Perform Test to see if services is populated
-        List<ServicesCustomer__c> listServices= [Select Name FROM ServicesCustomer__c Where Name= :transNew.Internet_PlanType__c];
+            	
+               warranty.Name=trans.Name;
+                warrantyList.add(warranty);
+                insert warrantyList;
+         }
+            
+            if(trans.TransactionType__c=='Payment'){
+                Payment__c payments= new Payment__c();
+                payments.payment_Amount__c=trans.PaymentAmount__c;
+                payments.Name=trans.Name;
+                paymentList.add(payments);
+                 insert paymentList;
+            }
+         
+        }
         
-        system.assertEquals(1,listServices.size());
+        
+       
+      
+         
+        
     }
 }
