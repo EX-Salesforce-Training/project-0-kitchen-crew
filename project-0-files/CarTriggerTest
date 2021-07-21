@@ -1,0 +1,41 @@
+// Name: CarTriggerTest
+// Author: Milan Winter
+// Created: 7/18/21
+// Last Updated: 7/18/21
+// Description: Creating some tests to check to make sure the carTrigger is working properly.
+
+
+@isTest
+private class CarTriggerTest {
+    
+    //single Deletion test
+	@isTest
+    static void singleTest() {
+        Customer__c cstmr = new Customer__c();
+        cstmr.Name = 'Billy Bob';
+        cstmr.Email__c = 'billybob@bobs.com';
+        cstmr.Phone_Number__c = 900292993;
+        
+        insert cstmr;
+        
+        Car__c c = new Car__c(); 
+        c.Mileage__c = 123;
+        c.Exterior_Color__c = 'Green';
+        c.Year__c = 2020;
+        c.Interior_Color__c = 'Gray';
+        c.Engine__c = 'Big One';
+        c.Doors__c = 4;
+        c.Vin__c = '4353455345';
+        c.Stock_No__c = 54934;
+        c.Owned_By__c = cstmr.Id;
+         
+        insert c;
+        
+        Database.DeleteResult result = Database.delete(c,false);
+        
+        System.assert(!result.isSuccess());
+        System.assert(result.getErrors().size() > 0);
+        System.assertEquals('Can\'t remove a car from the database if it is related to a customer. Must remove the relationship first.', result.getErrors()[0].getMessage());
+    }
+    
+}
