@@ -3,7 +3,7 @@
 // Name: BuyerTriggerTest
 // Author: Evan DeVizio
 // Created: 7/15/21
-// Updated: 7/16/21
+// Updated: 7/20/21
 // Description: Tests triggers on Buyer__c
 //
 ///////////////////////////////////////////////////////////////
@@ -20,6 +20,23 @@ public class BuyerTriggerTest {
         if (testCart.Buyer__c == testBuyer.Id) {
             system.assert(true);
         }
+    }
+    
+    @isTest
+    public static void testNegativeNewBuyerCart(){
+        Boolean exceptionOccurred = false;
+        // Create test Buyer, get the resulting Cart, 
+        // then try to add that Cart to the system throwing an Exception.
+        Buyer__C testbuyer = new Buyer__C(Email__c = 'testemail@test.com', Address__c = 'test address');
+        insert testBuyer;
+        Shopping_Cart__c testCart = [SELECT Buyer__c FROM Shopping_Cart__c WHERE Buyer__c = :testBuyer.Id LIMIT 1];
+        try {
+            insert testCart;
+        }
+        catch (DMLException e) {
+        	exceptionOccurred = true;
+        }
+        system.assert(exceptionOccurred, 'An exception should have been thrown.');
     }
     
     @isTest
