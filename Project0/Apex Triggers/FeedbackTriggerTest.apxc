@@ -1,0 +1,99 @@
+///////////////////////////////////////////////////////////////
+//
+// Name: FeedbackTriggerTest
+// Author: Evan DeVizio
+// Created: 7/20/21
+// Updated: 7/20/21
+// Description: Tests triggers on Feedback__c
+//
+///////////////////////////////////////////////////////////////
+
+@isTest
+public class FeedbackTriggerTest {
+    
+    @isTest
+    public static void testSingleFdbk() {
+        Boolean exceptionOccurred = false;
+    	// Create test data and insert to DB
+    	Seller__c testSeller = new Seller__c(Address__c = '123 Test Street' + '\n' + 'Test City, NY 11111', 
+                                             Email__c = 'testemail01@test.com');
+        Buyer__c testBuyer = new Buyer__c(Address__c = '987 Random Road' + '\n' + 'Reno, Nevada 89433', 
+                                         Email__c = 'testbuyer01@test.com');
+        
+
+        insert testSeller;
+        insert testBuyer;
+        Item__c testItem = new Item__c(Item_Name__c = 'Item Name Goes Here', Category__c = 'Electronics', 
+                                       Condition__c = 'New', Price__c = 500, Quantity__c = 10,
+                                       Status__c = 'Sold', Seller_Item_Relationship__c = testSeller.Id);
+        
+        insert testItem;
+        Feedback__c testFdbk = new Feedback__c(Buyer__c = testBuyer.Id, Seller__c = testItem.Seller_Item_Relationship__c, 
+                                              Item__c = testItem.Id, Comment__c = 'Thanks for the item!');
+        
+        try {
+        	insert testFdbk;
+        }
+        catch (DMLException e) {
+        	exceptionOccurred = true;
+        }
+        finally {
+            if(testItem.Status__c != 'Sold') {
+        		system.assert(exceptionOccurred, 'An exception should have been thrown.');   
+        	}
+        	Feedback__c resultFdbk = [SELECT Id, Seller__c FROM Feedback__c WHERE Seller__c = :testItem.Seller_Item_Relationship__c];
+        	if(testFdbk == resultFdbk) {
+            	system.assert(true);
+        	}
+        }
+    }
+    
+    @isTest
+    public static void testBulkFdbk() {
+        Boolean exceptionOccurred = false;
+        // Create and insert bulk data
+        Item__c testItem = new Item__c();
+        Feedback__c testFdbk = new Feedback__c();
+        List<Seller__c> testSellerList = new List<Seller__c>();
+        List<Buyer__c> testBuyerList = new List<Buyer__c>();
+        List<Item__c> testItemList = new List<Item__c>();
+        List<Feedback__c> testFdbkList = new List<Feedback__c>();
+        
+        for(Integer i = 0; i < 300; i++) {
+            testSellerList.add(new Seller__c(Address__c = '123 Test Street' + '\n' + 'Test City, NY 11111', 
+                                             Email__c = 'testseller' + i + '@test.com'));
+            testBuyerList.add(new Buyer__c(Address__c = '987 Random Road' + '\n' + 'Reno, Nevada 89433', 
+                                         Email__c = 'testbuyer' + i + '@test.com'));
+        }        
+        insert testBuyerList;
+        insert testSellerList;
+        
+        for(Integer i = 0; i < 300; i++) {
+            testItemList.add(new Item__c(Item_Name__c = 'Item Name Goes Here',
+                                        Category__c = 'Books',
+                                        Condition__c = 'Used',
+                                        Price__c = 20, 
+                                        Quantity__c = 10, 
+                                        Status__c = 'Sold', 
+                                        Seller_Item_Relationship__c = testSellerList[i].Id));
+        }
+        insert testItemList;
+
+        for(Integer i = 0; i < 300; i++) {
+            testFdbkList.add(new Feedback__c(Buyer__c =  testBuyerList[i].Id,
+                                            Seller__c = testItemList[i].Seller_Item_Relationship__c, 
+                                            Item__c = testItemList[i].Id,
+                                            Comment__c = 'Thanks for the item!'));
+        }
+        try {
+            insert testFdbkList;
+        } 
+        catch (DMLException e) {
+            exceptionOccurred = true;
+        }
+        finally {
+            List<Feedback__c> feedbacks = [SELECT Id, Item__c FROM Feedback__c];
+            system.assertEquals(testFdbkList.size(), feedbacks.size());
+        }
+    }
+}
