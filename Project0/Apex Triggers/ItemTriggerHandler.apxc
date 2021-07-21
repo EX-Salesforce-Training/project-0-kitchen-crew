@@ -7,11 +7,13 @@
 // Description: Helper class for triggers on Item__c
 //
 ///////////////////////////////////////////////////////////////
+
 public class ItemTriggerHandler {
     
     public static void NewVehicleQuantity(List<Item__c> itemList) {
         for(Item__c item : itemList) {
             if(item.RecordType.Name == 'Vehicle') {
+                // Only 1 Qty per Vehicle listing because VIN.
                 item.Quantity__c = 1;
             }
         }
