@@ -1,0 +1,14 @@
+// Name: CarTrigger
+// Author: Milan Winter
+// Created: 7/18/21
+// Last Updated: 7/18/21
+// Description: Creating a trigger to check to see if a car has an owner related to it before deleting it.
+//
+
+trigger CarTrigger on Car__c (before delete) {
+    Switch on trigger.OperationType {
+        when BEFORE_DELETE {
+            CarTriggerHandler.checkIfCarOwned(trigger.old);
+        }
+    }
+}
