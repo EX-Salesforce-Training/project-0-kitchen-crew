@@ -1,0 +1,25 @@
+//Name: SalesTransactionTriggerHandler
+//Author: Milan Winter
+//Date Created: 7/20
+//Date Modified: 7/20
+//Description: Class to hold the logic for the salesTransactionTrigger. 
+//Once a Transaction is marked closed-sold, the related car will be updated to have the customer from the transaction assigned to it
+
+
+public class SalesTransactionTriggerHandler {
+    
+    // take customerID from sales transaction and assign it to the car.ownerId from the sales transaction
+    public static void assignOwnerToCar(List<Sales_Transaction__c> salesTransactions) {
+        List<Car__c> carsList = new List<Car__c>();
+        for(Sales_Transaction__c sale :salesTransactions) {
+            if(sale.status__c == 'Closed Sold') {
+                Car__c car = [SELECT Id, Owned_By__c, IsOwned__c FROM Car__c WHERE Id = :sale.Car__c LIMIT 1][0];
+                car.Owned_By__c = sale.Customer__c;
+                car.IsOwned__c = true;
+                carsList.add(car);
+            }
+        }
+        update carsList;
+    }
+    
+}
