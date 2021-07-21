@@ -1,0 +1,153 @@
+//Name: SalesTransactionTriggerTest
+//Author: Milan Winter
+//Date Created 7/20
+//Date Updated 7/20
+//Description: Testing the SalesTransaction trigger to make sure that an customer is assigned to a car if a sale is made and marked as closed-sold.
+
+@isTest
+private class SalesTransactionTriggerTest {
+	
+    
+    
+    // Test single instance of salestransaction make sure it works correctly
+    @isTest
+    static void singleCheckForOwnerIDOnCar () {
+       
+        
+        Customer__c cstmr = new Customer__c();
+        cstmr.Name = 'Billy Bob';
+        cstmr.Email__c = 'billybob@bobs.com';
+        cstmr.Phone_Number__c = 900292993;
+        
+        insert cstmr;
+        
+        Customer__c customer = [SELECT Id FROM Customer__c LIMIT 1][0];
+        
+        Car__c c = new Car__c(); 
+        c.Mileage__c = 123;
+        c.Exterior_Color__c = 'Green';
+        c.Year__c = 2020;
+        c.Interior_Color__c = 'Gray';
+        c.Engine__c = 'Big One';
+        c.Doors__c = 4;
+        c.Vin__c = '4353455345';
+        c.Stock_No__c = 54934;
+         
+        insert c;
+        
+        Car__c car = [SELECT Id FROM Car__c LIMIT 1][0];
+        system.debug(customer);
+        system.debug(car);
+       
+        Sales_Transaction__c sale = new Sales_Transaction__c();
+        sale.Name = 'test sale';
+        sale.Car__c = car.Id;
+        sale.Customer__c = customer.Id;
+        
+        insert sale ; 
+        
+        Sales_Transaction__c saletransaction = [SELECT Id,Status__c FROM Sales_Transaction__C LIMIT 1][0];
+        saletransaction.Status__c = 'Closed Sold';
+       
+        update saletransaction;
+        
+        Car__c carTest = [SELECT Id, Owned_By__c,IsOwned__c FROM Car__c LIMIT 1];
+        
+        system.assertEquals(customer.Id, carTest.Owned_By__c);
+        system.assertEquals(true, carTest.IsOwned__c);
+
+    }
+    
+
+    // Multiple instances of sales changing status to closed sold making sure trigger works
+    @isTest
+    static void checkMultipleSalesAssigningCustomerToCar() {
+        
+        // Creating Customers
+  
+        List<Customer__c> newCustomers = new List<Customer__c>();
+            
+            for (integer i = 0; i < 3; i++) {
+                Customer__c c = new Customer__c();
+                c.Name = 'Test' + i;
+                c.Email__c = 'Test' + i + '@testingstuff.com';
+                c.Phone_Number__c = i + i;
+                newCustomers.add(c); 
+            }
+        insert newCustomers; 
+        
+        
+        // Creating a few New Cars
+        List<Car__c> newCars = new List<Car__c>();
+        
+        for(integer i = 0; i < 3; i++) {
+            Car__c c = new Car__c(); 
+            c.Mileage__c = 100 + i;
+            c.Exterior_Color__c = 'Green';
+            c.Year__c = 2020;
+            c.Interior_Color__c = 'Gray';
+            c.Engine__c = 'Big One';
+            c.Doors__c = 4;
+            c.Vin__c = '4353' + i;
+            c.Stock_No__c = i * 20;
+            newCars.add(c);
+    	}
+         
+        insert newCars;
+        
+       
+        // Grabbing newly Created Customers and Assigning to variables
+        Customer__c customerOne = [SELECT ID From Customer__c LIMIT 3][0];
+        Customer__c customerTwo = [SELECT ID FROM Customer__c LIMIT 3][1];
+        Customer__c customerThree = [SELECT ID FROM Customer__c LIMIT 3][2];
+        
+        //Grabbing newly Created Cars and Assigning to Variables
+        Car__c carOne = [SELECT ID FROM Car__c][0];
+        Car__c carTwo = [SELECT ID FROM Car__c][1];
+        Car__c carThree = [SELECT ID FROM Car__c][2];
+        
+        
+        //Creating New SalesTransactions
+        List<Sales_Transaction__c> newSales = new List<Sales_Transaction__c>();
+        
+        Sales_Transaction__c newSale1 = new Sales_Transaction__c();
+       	newSale1.Name = 'Test 1';
+        newSale1.Car__c = carOne.ID;
+        newSale1.Customer__c = customerOne.ID;
+        newSales.add(newSale1);
+        
+        Sales_Transaction__c newSale2 = new Sales_Transaction__c();
+       	newSale2.Name = 'Test 2';
+        newSale2.Car__c = carTwo.ID;
+        newSale2.Customer__c = customerTwo.ID;
+        newSales.add(newSale2);
+        
+        Sales_Transaction__c newSale3 = new Sales_Transaction__c();
+       	newSale3.Name = 'Test 3';
+        newSale3.Car__c = carThree.ID;
+        newSale3.Customer__c = customerThree.ID;
+        newSales.add(newSale3);
+        
+        insert newSales;
+        
+        List<Sales_Transaction__c> updatedSales  = [SELECT Id, Status__c FROM Sales_Transaction__c];
+        for(Sales_Transaction__c sales : updatedSales) {
+			sales.Status__c = 'Closed Sold';
+        }
+        update UpdatedSales;
+        
+        // Grabbing updated Cars now after creating and updating sales and checking ownerId values match customers and isOwned value is true
+        
+		Car__c firstCar = [SELECT Id, Owned_By__c,IsOwned__c FROM Car__c][0];
+        Car__c secondCar = [SELECT Id, Owned_By__c,IsOwned__c FROM Car__c][1];
+        Car__c thirdCar = [SELECT Id, Owned_By__c,IsOwned__c FROM Car__c][2];
+        
+        system.assertEquals(customerOne.Id, firstCar.Owned_By__c);
+        system.assertEquals(true, firstCar.IsOwned__c);
+        system.assertEquals(customerTwo.Id, secondCar.Owned_By__c);
+        system.assertEquals(true, secondCar.IsOwned__c);
+        system.assertEquals(customerThree.Id, thirdCar.Owned_By__c);
+        system.assertEquals(true, thirdCar.IsOwned__c);
+	}
+           
+}
