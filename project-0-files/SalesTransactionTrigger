@@ -1,0 +1,15 @@
+//Name: SalesTransaction Triggeer
+//Author: Milan Winter
+//Created: 7/20
+//Last Updated: 7/20
+//Description: Trigger that associates a car to the owner whenever a sales transaction is marked closed-sold. Also want the is-owned checkbox to be checked on the car.
+//
+
+trigger SalesTransactionTrigger on Sales_Transaction__c (before update, after update) {
+    Switch on trigger.OperationType {
+        when AFTER_UPDATE {
+            SalesTransactionTriggerHandler.assignOwnerToCar(trigger.new);
+        }
+        
+    }
+}
