@@ -1,0 +1,43 @@
+//Name: LocationTriggerTest
+//Author: Milan Winter
+//Created at: 7/17
+//Last Updated: 7/19
+//Description: Checking to make sure no location can be created within alabama or 
+//alaska because we are not creating locations in this state at this point
+
+@isTest
+private class LocationTriggerTest {
+    
+    
+    // testing the creation of a single location
+    @isTest
+    static void singleLocationTest() {
+        Location__c l = new Location__c(City__c = 'Montgomery', Name ='Montgomery Location', State__c = 'Alabama');
+        
+        try {
+          insert l;   
+        } catch(DmlException e) {
+            List<Location__c> newLocationlist = [SELECT Name From Location__c];
+            system.assertEquals(0, newLocationlist.size());
+        }
+          
+    }
+    
+    @isTest
+    static void multipleLocationsTest() {
+        List<Location__c> locations = new List<Location__c>();
+        Location__c locationOne = new Location__c(City__c = 'Montgomery', Name='Montgomery Location', State__c = 'Alabama');
+        locations.add(locationOne);
+        Location__c locationTwo = new Location__c(City__c = 'Juno', Name='Juno Location', State__c = 'Alaska');
+        locations.add(locationTwo);
+        Location__c locationThree = new Location__c(City__c = 'Test City', Name='Location name', State__c='Alaska');
+        locations.add(locationThree);
+        
+        try{
+            insert locations;
+        } catch(DmlException e) {
+             List<Location__c> newLocationlist = [SELECT Name From Location__c];
+            system.assertEquals(0, newLocationlist.size());
+        }
+    }
+}
