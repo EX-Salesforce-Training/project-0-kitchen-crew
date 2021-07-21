@@ -1,0 +1,20 @@
+////////////////////////////////////////////////////////
+//
+// Name: FeedbackTriggerHandler
+// Author: Evan DeVizio
+// Created: 7/20/21
+// Updated: 7/20/21
+// Description: Helper class for triggers on Feedback__c 
+//
+////////////////////////////////////////////////////////
+
+public class FeedbackTriggerHandler {
+    
+    public static void ItemMustBeSold(List<Feedback__c> fdbkList) {
+        for(Feedback__c fdbk : fdbkList) {
+            if(fdbk.Item__r.Status__c == 'Sold') {
+                fdbk.addError('Cannot leave Feedback on an Item that hasn\'t been sold yet.');
+        	}   
+        }
+    }
+}
