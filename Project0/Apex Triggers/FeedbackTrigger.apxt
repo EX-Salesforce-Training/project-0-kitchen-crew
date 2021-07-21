@@ -1,0 +1,24 @@
+////////////////////////////////////////////////////////////////////////////
+//
+// Name: FeedbackTrigger
+// Author: Evan DeVizio
+// Created: 7/20/21
+// Updated: 7/20/21
+// Description: Fires triggers on Feedback__c based on trigger operationType
+//
+////////////////////////////////////////////////////////////////////////////
+
+trigger FeedbackTrigger on Feedback__c (before insert, before update, before delete, after insert, after update, after delete, after undelete) {
+    
+    switch on trigger.operationType {
+        when BEFORE_INSERT{}
+        when BEFORE_UPDATE{}
+        when BEFORE_DELETE{}
+        when AFTER_INSERT{
+        	FeedbackTriggerHandler.ItemMustBeSold(trigger.new);
+        }
+        when AFTER_UPDATE{}
+        when AFTER_DELETE{}
+        when AFTER_UNDELETE{}
+    }
+}
