@@ -1,0 +1,21 @@
+// Name: Location TriggerHandler
+// Author: Milan Winter
+// Created: 7/17
+// Last Updated: 7/17
+// Description: Handles the logic for the location trigger, making sure no location can be in the state of Alabama or Alaska
+
+
+
+
+
+
+
+public class LocationTriggerHandler {
+    public static void checkLocationState(List<Location__c> locationsList) {
+        for(Location__c l : locationsList) {
+            if (l.State__c == 'Alabama' || l.State__c == 'Alaska') {
+                l.addError('Not currently opening up new locations in those states, check to see you are entering the right state.');
+            }
+        }
+	}
+}
