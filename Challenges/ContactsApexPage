@@ -2,7 +2,10 @@
     <apex:form>
     	<apex:pageBlock>
         	<apex:pageBlockTable value="{!contacts}" var="ctct">
-                <apex:column value="{!ctct.name}" />
+                <apex:column value="{!ctct.firstname}" />
+                <apex:column value="{!ctct.lastname}" />
+                <apex:column value="{!ctct.phone}" />
+                <apex:column value="{!ctct.email}" />
             </apex:pageBlockTable>
         </apex:pageBlock>
     </apex:form>
