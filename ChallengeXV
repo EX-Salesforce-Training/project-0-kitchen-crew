@@ -1,0 +1,48 @@
+
+//Create a table that shows a paginated table of Contacts with buttons to cycle the Contacts viewed in the table. Use a custom controller.
+//Bonus: Allow the page size to be controlled by the user.
+
+public class ChallengeXV {
+    
+  Integer recordLimit = 10;
+  Integer offSetLimit = 0;
+    
+    //Controller code goes here
+    
+    private String sortOrder = 'LastName';
+    
+    //Get all contacts
+    
+	Public List<Contact> lstContacts{
+    	get{
+                 lstContacts = [select Id,FirstName,LastName,Title,Email from Contact Limit :recordLimit OFFSET :offSetLimit ];
+                 return lstContacts;
+   		 }set;
+		}
+    
+    public void sortByLastName() {
+    this.sortOrder = 'LastName';
+		}
+	public void sortByFirstName() {
+    this.sortOrder = 'FirstName';
+	}
+    
+    
+       public ChallengeXV (){
+        
+     }
+    
+    
+     Public pagereference Next(){
+         offSetLimit = offSetLimit + 10;
+         return null;
+     }
+     
+     Public pagereference Previous(){
+         if(offSetLimit > 0)
+             offSetLimit = offSetLimit - 10;
+         return null;
+     }
+    
+    
+}
