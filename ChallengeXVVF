@@ -1,0 +1,26 @@
+<apex:page controller="ChallengeXV" >
+   <apex:form > 
+    <apex:pageBlock title="Contact Table">
+
+    <!-- Contacts List -->
+<apex:pageBlockTable value="{! lstContacts }" var="ct" id="table">
+    <apex:column value="{! ct.FirstName }"/>
+    <apex:column value="{! ct.LastName }"/>
+    <apex:column value="{! ct.Title }"/>
+    <apex:column value="{! ct.Email }"/>
+</apex:pageBlockTable>
+        
+   <apex:pageBlockButtons >
+        <apex:commandButton value="Previous" action="{!Previous}" reRender="table" status="status"/>
+          <apex:commandButton value="Next" action="{!Next}" reRender="table" status="status"/>
+            <apex:actionStatus id="status" >
+              <apex:facet name="start">  
+                <apex:image value="/img/loading32.gif" style="height: 15px;"></apex:image>
+              </apex:facet>
+           </apex:actionstatus> 
+    </apex:pageBlockButtons>
+     
+        
+    </apex:pageBlock>
+    </apex:form>
+</apex:page>
