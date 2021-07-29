@@ -1,0 +1,17 @@
+public class dogController {
+    
+    public String dogImage{get;set;}
+    
+    public dogController() {
+    	Http http = new Http();
+        HttpRequest request = new HttpRequest();
+        request.setEndpoint('https://dog.ceo/api/breeds/image/random');
+        request.setMethod('GET');
+        HttpResponse response = http.send(request);
+        
+        if(response.getStatusCode()== 200) {
+            Map<String, Object> results = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
+             dogImage = String.valueOf(results.get('message'));
+        }
+    }
+}
