@@ -1,0 +1,5 @@
+<apex:page controller="dogController">
+    <apex:pageBlock>
+        <apex:image value="{!dogImage}" />
+    </apex:pageBlock>
+</apex:page>
